@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp
 {
@@ -29,7 +32,34 @@ namespace DatingApp
         {
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("local")));
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddCors();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("Appsetings:Token").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+
+                    };
+                }
+                );
+
+            //            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //.AddJwtBearer(options =>
+            //                 options.TokenValidationParameters = new TokenValidationParameters
+            //                 {
+            //                     ValidateIssuer = false,
+            //                     ValidateAudience = false,
+            //                     ValidateLifetime = true,
+            //                     ValidateIssuerSigningKey = true,
+            //                     IssuerSigningKey = new SymmetricSecurityKey(
+            //                    Encoding.UTF8.GetBytes(Configuration["Appsetings:Token"])),
+            //                     ClockSkew = TimeSpan.Zero
+            //                 });
 
         }
 
@@ -41,11 +71,12 @@ namespace DatingApp
                 app.UseDeveloperExceptionPage();
             }
 
-           // app.UseHttpsRedirection();
-
+            // app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
             // siempre despues de routing 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 

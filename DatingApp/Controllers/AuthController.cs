@@ -53,12 +53,12 @@ namespace DatingApp.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login (UserForLogin userForLogin)
         {
+           // throw new Exception("ssssss");
             var user = await this._authRepository.Login(userForLogin.UserName.ToLower(), userForLogin.Password);
             if(user == null)
             {
-                var error = new Error(HttpStatusCode.Unauthorized.ToString(), "Credentials are not stored!");
+                return BadRequest(new Error(HttpStatusCode.Unauthorized.ToString(), "Credentials are not stored!"));
               
-                return new UnauthorizedObjectResult(error);
             }
             else
             {

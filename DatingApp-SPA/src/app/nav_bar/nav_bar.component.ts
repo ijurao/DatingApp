@@ -27,7 +27,7 @@ export class Nav_barComponent implements OnInit {
       this.loggedIn();
 
     }, error => {
-      console.log('Error de inicio de sesion');
+      console.log('Error de inicio de sesion' + error.message);
     } );
   }
 

@@ -7,17 +7,15 @@ import { UserRegisterModel } from '../register/register.component';
   providedIn: 'root'
 })
 export class AuthService {
-   url = 'https://localhost:44397/Auth';
+   url = 'https://localhost:44397/Auth/';
    
 constructor(private http: HttpClient) { }
 
  login(model: userInputModel)
  {
      const uri = 'login';
-     return this.http.post(this.url +uri, model).pipe(
-
+     return this.http.post(this.url + uri, model).pipe(
       map((response: any) => {
-        
         const token = response;
         if (token){
           localStorage.setItem('token', token);
@@ -28,6 +26,7 @@ constructor(private http: HttpClient) { }
 
  }
  register(modelInputRegister: UserRegisterModel){
+   console.log(modelInputRegister);
   const uri = 'register';
   return this.http.post(this.url + uri , modelInputRegister);
  }

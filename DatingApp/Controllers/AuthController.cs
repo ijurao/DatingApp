@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace DatingApp.Controllers
 {
@@ -55,12 +56,16 @@ namespace DatingApp.Controllers
             var user = await this._authRepository.Login(userForLogin.UserName.ToLower(), userForLogin.Password);
             if(user == null)
             {
-                return Unauthorized();
+                var error = new Error(HttpStatusCode.Unauthorized.ToString(), "Credentials are not stored!");
+              
+                return new UnauthorizedObjectResult(error);
             }
             else
             {
+                 
                 var token = buildToken(user);
-                return Ok(token);
+                var json = JsonConvert.SerializeObject(token);
+                return new OkObjectResult(json);
             }
         }
 

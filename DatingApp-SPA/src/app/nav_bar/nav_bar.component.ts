@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
+import { AlertifyService } from '../_services/alertify.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -12,34 +13,36 @@ export class Nav_barComponent implements OnInit {
 
   title = 'Dating App';
   modelInputLogin: userInputModel = new userInputModel() ;
- 
-  constructor(private authService: AuthService) {
+  currentUser: string;
+  constructor(private authService: AuthService, private alertify: AlertifyService) {
     this.modelInputLogin.userName = '';
     this.modelInputLogin.password = '';
 
    }
 
   ngOnInit() {
+    this.currentUser = this.authService.getCurrentUserName();
+
   }
 
   login(){
     this.authService.login(this.modelInputLogin).subscribe(next => {
-      this.loggedIn();
+      this.alertify.succes('Welcome!');
+      this.currentUser = this.authService.getCurrentUserName();
 
     }, error => {
-      console.log('Error de inicio de sesion' + error.message);
+      this.alertify.error(error.message);
     } );
   }
-
+  
   loggedIn()
   {
-    const token = localStorage.getItem('token');
-    return !!token;
+    return this.authService.loggedIn();
   }
 
   logout()
   {
-    localStorage.removeItem('token');
+    this.authService.logout()
   }
 
 }

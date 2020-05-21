@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
+import { Router } from '@angular/router';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -14,7 +15,7 @@ export class Nav_barComponent implements OnInit {
   title = 'Dating App';
   modelInputLogin: userInputModel = new userInputModel() ;
   currentUser: string;
-  constructor(private authService: AuthService, private alertify: AlertifyService) {
+  constructor(private authService: AuthService, private alertify: AlertifyService, private routerService: Router) {
     this.modelInputLogin.userName = '';
     this.modelInputLogin.password = '';
 
@@ -32,7 +33,9 @@ export class Nav_barComponent implements OnInit {
 
     }, error => {
       this.alertify.error(error.message);
-    } );
+    } ,() =>{
+      this.routerService.navigate(['/members']);
+    });
   }
   
   loggedIn()
@@ -42,7 +45,8 @@ export class Nav_barComponent implements OnInit {
 
   logout()
   {
-    this.authService.logout()
+    this.authService.logout();
+    this.routerService.navigate(['/home']);
   }
 
 }

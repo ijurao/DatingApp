@@ -32,7 +32,7 @@ export class Nav_barComponent implements OnInit {
       this.currentUser = this.authService.getCurrentUserName();
 
     }, error => {
-      this.alertify.error(error.message);
+      this.alertify.error(error);
     } ,() =>{
       this.routerService.navigate(['/members']);
     });

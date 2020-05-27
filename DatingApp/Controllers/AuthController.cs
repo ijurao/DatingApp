@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 
 namespace DatingApp.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {

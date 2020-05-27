@@ -4,12 +4,13 @@ import { userInputModel } from '../nav_bar/nav_bar.component';
 import {map} from 'rxjs/operators';
 import { UserRegisterModel } from '../register/register.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-   url = 'https://localhost:44397/Auth/';
+   url = environment.apiUrl +  'Auth/';
    jwthelper = new JwtHelperService();
    decodedToken : any;
 constructor(private http: HttpClient) { }
@@ -45,7 +46,7 @@ constructor(private http: HttpClient) { }
 
 getCurrentUserName(){
 
-  if (this.decodedToken !== null)
+  if (this.decodedToken)
   {
     return this.decodedToken.unique_name;
   }

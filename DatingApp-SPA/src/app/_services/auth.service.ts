@@ -53,6 +53,16 @@ getCurrentUserName(){
   return '';
 }
 
+getCurrentUserId(){
+
+  if (this.decodedToken)
+  {
+    return this.decodedToken.nameid;
+  }
+  return '';
+}
+
+
 setDecodedToken(token)
 {
   this.decodedToken = token;

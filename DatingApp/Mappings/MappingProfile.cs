@@ -21,6 +21,7 @@ namespace DatingApp.Migrations
                .ForMember(dest => dest.MainPhotoUrl, op => op.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url))
               .ForMember(det => det.Age, op => op.MapFrom(src => src.DateOfBirth.Age()));
             CreateMap<UserPhoto, UserPhotoDTO>();
+            CreateMap<UserForUpdateDTO, UserApplication>();
         }
     
     }

@@ -11,7 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorInterceptorProvider } from './_services/http.error.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {TabsModule} from 'ngx-bootstrap/tabs'
+import {TabsModule, TabsetComponent} from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListComponent } from './list/list.component';
@@ -27,6 +27,9 @@ import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { GaleeryComponent } from './galeery/galeery.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MemberEditlResolver } from './_resolvers/member-edit.resolver';
+import { MemberEditComponent } from './members/member-list/member-edit/member-edit.component';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 
 export function TokenGetter() {
    return localStorage.getItem("token");
@@ -46,7 +49,9 @@ export function TokenGetter() {
       MessagesComponent,
       MemberCardComponent,
       MemberDetailsComponent,
-      GaleeryComponent
+      GaleeryComponent,
+      MemberEditComponent,
+      
    ],
    imports: [
       BrowserModule,
@@ -69,10 +74,12 @@ export function TokenGetter() {
    ],
    providers: [
       AuthService,
+      PreventUnsavedChanges,
       UsersService,
       ErrorInterceptorProvider,
       MemberDetailResolver,
-      MemberListResolver
+      MemberListResolver,
+      MemberEditlResolver
       ],
    bootstrap: [
       AppComponent

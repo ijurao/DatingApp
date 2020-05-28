@@ -7,11 +7,14 @@ import {NgxGalleryOptions} from '@kolkov/ngx-gallery';
 import {NgxGalleryImage} from '@kolkov/ngx-gallery';
 import {NgxGalleryAnimation} from '@kolkov/ngx-gallery';
 import { Photo } from 'src/app/_models/Photo';
+import { TabsModule } from 'ngx-bootstrap/tabs/tabs.module';
 
 @Component({
   selector: 'app-member-details',
   templateUrl: './member-details.component.html',
-  styleUrls: ['./member-details.component.css']
+  styleUrls: ['./member-details.component.css'],
+
+
 })
 export class MemberDetailsComponent implements OnInit {
 
@@ -26,34 +29,6 @@ export class MemberDetailsComponent implements OnInit {
       this.user = resul[userParam];
     });
 
-    this.galleryOptions = [
-      {
-          width: '500px',
-          height: '500px',
-          imagePercent: 100,
-          thumbnailsColumns: 4,
-          imageAnimation: NgxGalleryAnimation.Slide,
-          preview : false
-      }
-  ];
-
-    this.galleryImages = this.getImages();
-    }
-
- 
-  getImages(){
-
-    const photosToReturn = [];
-    for (const photo of this.user.photos)
-    {
-      photosToReturn.push({
-          small: photo.url,
-          medium: photo.url,
-          big: photo.url,
-          description : photo.description
-         });
-    }
-    console.log(photosToReturn);
-    return photosToReturn;
-  }
+   
+}
 }

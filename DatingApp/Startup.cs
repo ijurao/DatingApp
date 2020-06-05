@@ -48,8 +48,10 @@ namespace DatingApp
 
                 op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudImages"));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("local")));
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IPhotoRepository, CloudinaryPhotoRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -107,7 +109,7 @@ namespace DatingApp
 
             // app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+            
             app.UseRouting();
 
             app.UseAuthentication();

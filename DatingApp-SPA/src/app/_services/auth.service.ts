@@ -47,8 +47,19 @@ constructor(private http: HttpClient) { }
 getCurrentUserName(){
 
   if (this.decodedToken)
-  {
+  { 
     return this.decodedToken.unique_name;
+  }
+  return '';
+}
+
+
+
+getCurrentPhotoUrlUser(){
+
+  if (this.decodedToken)
+  {
+    return this.decodedToken.UrlMainPhoto;
   }
   return '';
 }

@@ -15,6 +15,7 @@ export class Nav_barComponent implements OnInit {
   title = 'Dating App';
   modelInputLogin: userInputModel = new userInputModel() ;
   currentUser: string;
+  currentUrlphoto : string;
   constructor(private authService: AuthService, private alertify: AlertifyService, private routerService: Router) {
     this.modelInputLogin.userName = '';
     this.modelInputLogin.password = '';
@@ -27,12 +28,14 @@ export class Nav_barComponent implements OnInit {
   }
 
   login(){
+   alert('ss');
     this.authService.login(this.modelInputLogin).subscribe(next => {
       this.alertify.succes('Welcome!');
       this.currentUser = this.authService.getCurrentUserName();
+      this.currentUrlphoto = this.authService.getCurrentPhotoUrlUser();
 
     }, error => {
-      this.alertify.error(error);
+      console.log(error);
     } ,() =>{
       this.routerService.navigate(['/members']);
     });

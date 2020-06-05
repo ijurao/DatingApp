@@ -61,7 +61,7 @@
   </tab>
      <tab heading="Manage Photos">
      
-     
+       <app-member-upload-photo [photos]="user.photos" (getMemberPhotoChange)="setMainPhoto($event)"></app-member-upload-photo>
     </tab>
   
    </tabset>

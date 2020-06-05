@@ -18,8 +18,9 @@
       </ul>
     </div>
       <div *ngIf="loggedIn()"   class="btn-group" dropdown>
+        <img src="{{currentUrlphoto}}" width="30" height="30" alt="" >
+
         <a  class="dropdown-toogle text-light" dropdownToggle>Welcome  {{currentUser | uppercase}} </a>
-       
         <div class="dropdown-menu mt-3" *dropdownMenu>
           <a class="dropdown-item"  href="#" [routerLink]="['/member/edit']"><i class='fa fa-user'></i>Edit Profile</a>
           <div class="dropdown-divider"></div>

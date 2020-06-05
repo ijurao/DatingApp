@@ -48,6 +48,13 @@ export class MemberEditComponent implements OnInit {
     },error => {
       this.alertrify.error(error);
     });
+  } 
+
+  setMainPhoto(photoUtrl: string)
+  {
+     this.user.mainPhotoUrl = photoUtrl;
   }
+
+
 
 }

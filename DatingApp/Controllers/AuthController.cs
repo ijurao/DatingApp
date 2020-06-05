@@ -6,6 +6,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp.Data;
 using DatingApp.DTOS;
 using DatingApp.Models;
@@ -23,11 +24,13 @@ namespace DatingApp.Controllers
     {
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AuthController(IAuthRepository authRepository,IConfiguration config)
+        public AuthController(IAuthRepository authRepository,IConfiguration config, IMapper mapper)
         {
             _authRepository = authRepository;
             _configuration= config;
+            _mapper= mapper;
         }
 
         [HttpPost("register")]
@@ -71,10 +74,12 @@ namespace DatingApp.Controllers
 
         private string buildToken(UserApplication user)
         {
+            var mainPhoto = user.Photos.FirstOrDefault(p => p.IsMain);
             var claims = new[]
             {
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                new Claim(ClaimTypes.Name,user.UserName),
+               new Claim("UrlMainPhoto",mainPhoto.Url)
 
            };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Appsetings:Token").Value));

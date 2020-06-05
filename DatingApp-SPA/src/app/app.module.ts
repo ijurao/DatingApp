@@ -30,6 +30,8 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MemberEditlResolver } from './_resolvers/member-edit.resolver';
 import { MemberEditComponent } from './members/member-list/member-edit/member-edit.component';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
+import { MemberUploadPhotoComponent } from './members/member-list/member-upload-photo/member-upload-photo.component';
+import { FileUploadModule } from 'ng2-file-upload';
 
 export function TokenGetter() {
    return localStorage.getItem("token");
@@ -51,6 +53,7 @@ export function TokenGetter() {
       MemberDetailsComponent,
       GaleeryComponent,
       MemberEditComponent,
+      MemberUploadPhotoComponent
       
    ],
    imports: [
@@ -70,7 +73,8 @@ export function TokenGetter() {
            blacklistedRoutes: ["localhost:44397/api/auth"],
          },
        }),
-       TabsModule.forRoot()
+       TabsModule.forRoot(),
+       FileUploadModule
    ],
    providers: [
       AuthService,

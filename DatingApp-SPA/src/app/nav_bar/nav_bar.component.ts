@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
+import { logging } from 'protractor';
+import { User } from '../_models/user';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -28,7 +30,7 @@ export class Nav_barComponent implements OnInit {
   }
 
   login(){
-   alert('ss');
+   
     this.authService.login(this.modelInputLogin).subscribe(next => {
       this.alertify.succes('Welcome!');
       this.currentUser = this.authService.getCurrentUserName();
@@ -51,8 +53,11 @@ export class Nav_barComponent implements OnInit {
     this.authService.logout();
     this.routerService.navigate(['/home']);
   }
+  
 
 }
+
+
 // tslint:disable-next-line: class-name
 export class userInputModel {
    userName: string;

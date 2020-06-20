@@ -48,9 +48,24 @@ namespace DatingApp.Controllers
                 return BadRequest(new Error(HttpStatusCode.BadRequest.ToString(),"User " + userDto.UserName + "already exists"));
             }
 
-            var userToCreate = new UserApplication() { UserName = userDto.UserName.ToLower() };
+            var userToCreate = _mapper.Map<UserApplication>(userDto);
+            
             var registerdUser = await this._authRepository.RegisterUser(userToCreate, userDto.Password);
-            return Ok(registerdUser);
+            UserPhoto photo = new UserPhoto
+            {
+                IsMain = true,
+                UserApplicationId = registerdUser.Id,
+                PublicId = "i0qwn3iomugvu4ps04p8",
+                DateAdded = DateTime.Now,
+                user = registerdUser,
+                Url = "http://res.cloudinary.com/dapyqzhn4/image/upload/v1591522415/i0qwn3iomugvu4ps04p8.png"
+            };
+
+            registerdUser.Photos = new List<UserPhoto>();
+            registerdUser.Photos.Add(photo);
+            await  _authRepository.SaveAll();
+            var userToReturn = _mapper.Map<UserDetailsDTO>(userToCreate);
+            return CreatedAtRoute("GetUser", new { controller = "users", id = userToCreate.Id}, userToReturn);
         }
 
         [HttpPost("login")]
@@ -65,7 +80,6 @@ namespace DatingApp.Controllers
             }
             else
             {
-                 
                 var token = buildToken(user);
                 var json = JsonConvert.SerializeObject(token);
                 return new OkObjectResult(json);
@@ -75,6 +89,7 @@ namespace DatingApp.Controllers
         private string buildToken(UserApplication user)
         {
             var mainPhoto = user.Photos.FirstOrDefault(p => p.IsMain);
+           
             var claims = new[]
             {
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),

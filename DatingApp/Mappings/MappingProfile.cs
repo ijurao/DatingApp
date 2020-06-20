@@ -24,6 +24,7 @@ namespace DatingApp.Migrations
             CreateMap<UserForUpdateDTO, UserApplication>();
             CreateMap<UserPhoto, PhotoForReturnDTO>();
             CreateMap<PhotoForCreationDTO, UserPhoto>();
+            CreateMap<UserForRegister, UserApplication>();
         }
     
     }

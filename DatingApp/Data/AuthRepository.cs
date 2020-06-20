@@ -91,5 +91,10 @@ namespace DatingApp.Data
             }
             return  false;
          }
+
+        public async Task SaveAll()
+        {
+            await this._context.SaveChangesAsync();
+        }
     }
 }

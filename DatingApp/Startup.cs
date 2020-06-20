@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using DatingApp.ActionFilters;
 using DatingApp.Data;
 using DatingApp.Helpers;
 using DatingApp.Migrations;
@@ -53,6 +54,7 @@ namespace DatingApp
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IPhotoRepository, CloudinaryPhotoRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();
+            services.AddScoped<LogUserActivity>();
             services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

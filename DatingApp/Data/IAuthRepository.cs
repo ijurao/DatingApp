@@ -14,5 +14,7 @@ namespace DatingApp.Data
         Task<UserApplication> Login(string userName, string pass);
 
         Task<bool> UserExists(string userName);
+
+        Task  SaveAll();
     }
 }

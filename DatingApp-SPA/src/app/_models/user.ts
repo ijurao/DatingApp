@@ -6,7 +6,7 @@ export interface User {
     userName: string;
     knownAs: string;
     gender: string;
-    createDdate: Date;
+    createdDate: Date;
     lastAcces: string;
     mainPhotoUrl: string;
     city: string;
@@ -16,5 +16,6 @@ export interface User {
     lookingFor?: string;
     photos?: Photo[];
     age: number;
+    passwordRepeat : string;
 
 }

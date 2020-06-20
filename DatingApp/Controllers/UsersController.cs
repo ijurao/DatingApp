@@ -5,6 +5,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using DatingApp.ActionFilters;
 using DatingApp.Data;
 using DatingApp.DTOS;
 using DatingApp.Models;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DatingApp.Controllers
 {
+    [ServiceFilter(typeof (LogUserActivity))]
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -36,7 +38,7 @@ namespace DatingApp.Controllers
             return Ok(usersToReturn);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}",Name ="GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await this._repo.GetUser(id);

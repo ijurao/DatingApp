@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { userInputModel } from '../nav_bar/nav_bar.component';
 import {map} from 'rxjs/operators';
-import { UserRegisterModel } from '../register/register.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import {environment} from '../../environments/environment';
+import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class AuthService {
    decodedToken : any;
 constructor(private http: HttpClient) { }
 
- login(model: userInputModel)
+ login(model: any)
  {
      const uri = 'login';
      return this.http.post(this.url + uri, model).pipe(
@@ -31,7 +31,7 @@ constructor(private http: HttpClient) { }
      );
 
  }
- register(modelInputRegister: UserRegisterModel){
+ register(modelInputRegister: User){
   const uri = 'register';
   return this.http.post(this.url + uri , modelInputRegister);
  }

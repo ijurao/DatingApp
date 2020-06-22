@@ -35,6 +35,8 @@ import { MemberEditComponent } from './members/member-list/member-edit/member-ed
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { MemberUploadPhotoComponent } from './members/member-list/member-upload-photo/member-upload-photo.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 
 export function TokenGetter() {
    return localStorage.getItem("token");
@@ -67,6 +69,7 @@ export function TokenGetter() {
       FormsModule,
       NgxGalleryModule,
       TimeagoModule.forRoot(),
+      PaginationModule.forRoot(),
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
       BsDatepickerModule.forRoot(),

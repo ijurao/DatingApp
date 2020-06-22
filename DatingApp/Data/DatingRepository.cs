@@ -1,8 +1,10 @@
-﻿using DatingApp.Models;
+﻿using DatingApp.Helpers;
+using DatingApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DatingApp.Data
@@ -32,14 +34,32 @@ namespace DatingApp.Data
             return user;
         }
 
-        public async Task<IEnumerable<UserApplication>> GetUsers()
+        public async Task<PagedList<UserApplication>> GetUsers(UserParams parameters)
         {
            
 
-            var list = await this._context.Users.Include(x => x.Photos).ToListAsync();
-            return list;
+            var list =  this._context.Users.Include(x => x.Photos).AsQueryable();
+            var minDateOfBirth = DateTime.Today.AddYears(-parameters.MaxAge + 1);
+            var maxDateOfBirth = DateTime.Today.AddYears(-parameters.MinAge + 1);
+            list = list.Where(x => x.Id != parameters.UserApplicationId)
+                        .Where(x => x.Gender == parameters.Gender)
+                        .Where(x => x.DateOfBirth >= minDateOfBirth && x.DateOfBirth <= maxDateOfBirth);
+
+            if (!String.IsNullOrEmpty(parameters.OrderBy))
+            {
+                GenericSorter<UserApplication> genericSorter = new GenericSorter<UserApplication>();
+                list = genericSorter.Sort(list, parameters.OrderBy, "desc");
+            }
+        
+
+
+
+
+
+            return await PagedList<UserApplication>.CreateSync(list, parameters.PageNumber, parameters.PageSize);
         }
 
+       
         public async Task<bool> SaveAll()
         {
             return await this._context.SaveChangesAsync() > 0;
@@ -58,4 +78,7 @@ namespace DatingApp.Data
             return photo;
         }
     }
+
+
+  
 }

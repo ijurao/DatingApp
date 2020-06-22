@@ -73,6 +73,15 @@ getCurrentUserId(){
   return '';
 }
 
+getCurrentUserGender(){
+
+  if (this.decodedToken)
+  {
+    return this.decodedToken.Gender;
+  }
+  return '';
+
+}
 
 setDecodedToken(token)
 {

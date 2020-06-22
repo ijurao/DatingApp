@@ -94,7 +94,8 @@ namespace DatingApp.Controllers
             {
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                new Claim(ClaimTypes.Name,user.UserName),
-               new Claim("UrlMainPhoto",mainPhoto.Url)
+               new Claim("UrlMainPhoto",mainPhoto.Url),
+               new Claim("Gender", user.Gender)
 
            };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Appsetings:Token").Value));

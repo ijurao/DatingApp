@@ -78,5 +78,48 @@ namespace DatingApp.Controllers
 
         }
 
+        [HttpPost("{liker}/like/{likee}")]
+
+        public async Task<IActionResult> Like(int liker, int likee)
+        {
+            if (liker == likee)
+            {
+                return BadRequest("You can't like ypur self");
+
+            }
+            if (liker != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
+
+            if (await this._repo.GetLike(liker,likee) != null)
+            {
+                return BadRequest("You already Like from this user " + likee);
+            }
+
+            var userToLike = await  this._repo.GetUser(likee);
+            var userLiker = await this._repo.GetUser(liker);
+            if (userToLike == null)
+            {
+                return NotFound("User {likee} couldn't be founded");
+            }
+
+            Like like = new Like
+            {
+                Likee = userToLike,
+                Liker = userLiker,
+                LikeeId = userToLike.Id,
+                LikerId = userLiker.Id,
+            };
+
+            _repo.Add<Like>(like);
+            if ( !await _repo.SaveAll())
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
     }
 }

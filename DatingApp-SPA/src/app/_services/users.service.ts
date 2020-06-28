@@ -24,7 +24,7 @@ getUser(id: number): Observable<User>{
   return this.http.get<User>(this.baseUrl + 'users/' + id);
 
 }
-getUsers(page?,itemsPerPage?,userParams?): Observable<PaginatedResult<User[]>>{
+getUsers(page?,itemsPerPage?,userParams?, likesParam?): Observable<PaginatedResult<User[]>>{
 
   const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
   let params  = new HttpParams();
@@ -37,6 +37,16 @@ getUsers(page?,itemsPerPage?,userParams?): Observable<PaginatedResult<User[]>>{
     params = params.append('maxAge',userParams.maxAge);
     params = params.append('gender',userParams.gender);
     params = params.append('orderBy',userParams.orderBy);
+  }
+
+  if(likesParam === "Likees"){
+
+    params = params.append("likees",'true');
+  }
+  if(likesParam === "Likers")
+  {
+    params = params.append("likers",'true');
+
   }
   return this.http.get<User[]>(this.baseUrl + 'users',{observe: 'response', params})
   .pipe(
@@ -67,5 +77,9 @@ deletePhoto(idUser: number, idPhoto: number) {
 
   return this.http.delete(this.baseUrl + 'photos/' + idUser + "/" + idPhoto  ,{});
 
+}
+
+like(liker: number, likee: number){
+  return this.http.post(this.baseUrl + "users/" +  liker + "/like/" + likee ,{});
 }
 }

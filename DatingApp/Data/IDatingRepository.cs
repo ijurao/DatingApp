@@ -19,5 +19,7 @@ namespace DatingApp.Data
 
         Task<UserPhoto> GetMainPhotoForUser(int userId);
 
+       Task<Like> GetLike(int liker, int likee);
+
     }
 }

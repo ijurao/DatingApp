@@ -26,5 +26,7 @@ namespace DatingApp.Models
         public ICollection<UserPhoto> Photos { get; set; }
         [NotMapped]
         public string Password { get; set; }
+        public ICollection<Like> Likers{ get; set; }
+        public ICollection<Like> Likees { get; set; }
     }
 }

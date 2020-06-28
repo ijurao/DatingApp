@@ -1,4 +1,5 @@
 ﻿using DatingApp.Helpers;
+using DatingApp.Migrations;
 using DatingApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,6 +35,20 @@ namespace DatingApp.Data
             return user;
         }
 
+        private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers)
+        {
+            var user = await this._context.Users.Include(x => x.Likees).Include(x => x.Likers).FirstOrDefaultAsync(u => u.Id == id);
+            if (likers)
+            {
+                return user.Likers.Where(u => u.LikeeId == id).Select(i => i.LikerId);
+            }
+            else
+            {
+                return user.Likees.Where(u => u.LikerId == id).Select(i => i.LikeeId);
+
+            }
+
+        }
         public async Task<PagedList<UserApplication>> GetUsers(UserParams parameters)
         {
            
@@ -45,6 +60,19 @@ namespace DatingApp.Data
                         .Where(x => x.Gender == parameters.Gender)
                         .Where(x => x.DateOfBirth >= minDateOfBirth && x.DateOfBirth <= maxDateOfBirth);
 
+            if (parameters.Likers)
+            {
+                var userLikers = await GetUserLikes(parameters.UserApplicationId, parameters.Likers);
+                list = list.Where(u => userLikers.Contains(u.Id));
+            }
+
+            if (parameters.Likees)
+            {
+                var userLikees = await GetUserLikes(parameters.UserApplicationId, parameters.Likers);
+                list = list.Where(u => userLikees.Contains(u.Id));
+
+
+            }
             if (!String.IsNullOrEmpty(parameters.OrderBy))
             {
                 GenericSorter<UserApplication> genericSorter = new GenericSorter<UserApplication>();
@@ -77,8 +105,14 @@ namespace DatingApp.Data
 
             return photo;
         }
+
+        public async Task<Like> GetLike(int liker, int likee)
+        {
+            return await this._context.Likes.FirstOrDefaultAsync(u => u.LikerId == liker && u.LikeeId == likee);
+        }
+
     }
 
 
-  
+
 }

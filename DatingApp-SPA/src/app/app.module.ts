@@ -36,6 +36,7 @@ import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { MemberUploadPhotoComponent } from './members/member-list/member-upload-photo/member-upload-photo.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ListResolver } from './_resolvers/lists.resolver';
 
 
 export function TokenGetter() {
@@ -93,7 +94,8 @@ export function TokenGetter() {
       ErrorInterceptorProvider,
       MemberDetailResolver,
       MemberListResolver,
-      MemberEditlResolver
+      MemberEditlResolver,
+      ListResolver
       ],
    bootstrap: [
       AppComponent

@@ -37,6 +37,8 @@ import { MemberUploadPhotoComponent } from './members/member-list/member-upload-
 import { FileUploadModule } from 'ng2-file-upload';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ListResolver } from './_resolvers/lists.resolver';
+import { MessagesReolver } from './_resolvers/messages.resolver';
+import { MembersThreadMessagesComponent } from './members/member-list/members-threadMessages/members-threadMessages.component';
 
 
 export function TokenGetter() {
@@ -59,7 +61,8 @@ export function TokenGetter() {
       MemberDetailsComponent,
       GaleeryComponent,
       MemberEditComponent,
-      MemberUploadPhotoComponent
+      MemberUploadPhotoComponent,
+      MembersThreadMessagesComponent
       
    ],
    imports: [
@@ -95,7 +98,8 @@ export function TokenGetter() {
       MemberDetailResolver,
       MemberListResolver,
       MemberEditlResolver,
-      ListResolver
+      ListResolver,
+      MessagesReolver
       ],
    bootstrap: [
       AppComponent

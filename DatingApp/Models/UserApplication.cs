@@ -28,5 +28,7 @@ namespace DatingApp.Models
         public string Password { get; set; }
         public ICollection<Like> Likers{ get; set; }
         public ICollection<Like> Likees { get; set; }
+        public ICollection<Message> MessagesSents { get; set; }
+        public ICollection<Message> MessagesReceived { get; set; }
     }
 }

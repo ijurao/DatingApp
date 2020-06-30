@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DatingApp.DTOS;
+using DatingApp.DTOS.Messages;
 using DatingApp.Helpers;
 using DatingApp.Models;
 using System;
@@ -25,6 +26,10 @@ namespace DatingApp.Migrations
             CreateMap<UserPhoto, PhotoForReturnDTO>();
             CreateMap<PhotoForCreationDTO, UserPhoto>();
             CreateMap<UserForRegister, UserApplication>();
+
+            CreateMap<MessageForCreationDto, Message>().ReverseMap();
+            CreateMap<Message, MessageToReturnDto>().ForMember(m => m.SenderPhotoUrl, opt => opt.MapFrom(u => u.Sender.Photos.FirstOrDefault(p => p.IsMain).Url))
+                                                    .ForMember(m => m.RecipientPhotoUrl, opt => opt.MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url));
         }
     
     }

@@ -33,6 +33,19 @@ namespace DatingApp
         }
 
         public IConfiguration Configuration { get; }
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("local")));
+            ConfigureServices(services);
+
+        }
+
+        public void ConfigureProductiontServices(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
+            ConfigureServices(services);
+
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -50,7 +63,7 @@ namespace DatingApp
                 op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudImages"));
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("local")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IPhotoRepository, CloudinaryPhotoRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();
@@ -70,18 +83,18 @@ namespace DatingApp
                 }
                 );
 
-            //            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //.AddJwtBearer(options =>
-            //                 options.TokenValidationParameters = new TokenValidationParameters
-            //                 {
-            //                     ValidateIssuer = false,
-            //                     ValidateAudience = false,
-            //                     ValidateLifetime = true,
-            //                     ValidateIssuerSigningKey = true,
-            //                     IssuerSigningKey = new SymmetricSecurityKey(
-            //                    Encoding.UTF8.GetBytes(Configuration["Appsetings:Token"])),
-            //                     ClockSkew = TimeSpan.Zero
-            //                 });
+//            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//.AddJwtBearer(options =>
+//                 options.TokenValidationParameters = new TokenValidationParameters
+//                 {
+//                     ValidateIssuer = false,
+//                     ValidateAudience = false,
+//                     ValidateLifetime = true,
+//                     ValidateIssuerSigningKey = true,
+//                     IssuerSigningKey = new SymmetricSecurityKey(
+//                    Encoding.UTF8.GetBytes(Configuration["Appsetings:Token"])),
+//                     ClockSkew = TimeSpan.Zero
+//                 });
 
         }
 
@@ -96,20 +109,25 @@ namespace DatingApp
             {
                 app.UseExceptionHandler(builder =>
                 {
-                    builder.Run(async context => {
-                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    builder.Run(async context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         var error = context.Features.Get<IExceptionHandlerFeature>();
                         if (error != null)
                         {
                             context.Response.addAplicationError(error.Error.Message);
                             await context.Response.WriteAsync(error.Error.Message);
                         }
-                    
+
                     });
                 });
+                app.UseHsts();
             }
+            app.UseHttpsRedirection();
 
-            // app.UseHttpsRedirection();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("Pagination"));
             
             app.UseRouting();
@@ -122,6 +140,7 @@ namespace DatingApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fall");
             });
 
         }
